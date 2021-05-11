@@ -1,0 +1,2 @@
+<?php
+$routes->resource('Student');
