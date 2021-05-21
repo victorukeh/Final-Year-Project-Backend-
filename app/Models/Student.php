@@ -24,9 +24,11 @@ class Student extends Model
         'firstname' => 'required|min_length[2]',
         'lastname' => 'required|min_length[2]',
         'username' => 'required|min_length[10]',
-        'email' => [
-            'rules' => 'required|valid_email|is_unique[students.email]'
-        ],
+        'email' => 'required|valid_email|is_unique[students.email,id,{id}]'
+        // [
+        //     'rules' => 'required|valid_email|is_unique[students.email]'
+        // ]
+        ,
         'password' => 'required|min_length[6]', 
         'program' => 'required|min_length[8]'
     ];
