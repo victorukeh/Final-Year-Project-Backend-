@@ -3,10 +3,10 @@
 namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\Lecturer as LecturerModel;
 use \CodeIgniter\API\ResponseTrait;
+use App\Models\User as UserModel;
 
-class Lecturer extends BaseController
+class User extends BaseController
 {
     use ResponseTrait;
 
@@ -15,10 +15,10 @@ class Lecturer extends BaseController
     //@accesss Private  
     public function index()
     {
-        $lecturer = new LecturerModel;
-        $result = $lecturer->findAll();
-        if ($lecturer->errors()) {
-            return $this->fail($lecturer->errors());
+        $user = new UserModel;
+        $result = $user->findAll();
+        if ($user->errors()) {
+            return $this->fail($user->errors());
         } else {
             return $this->respond($result);
         }
@@ -29,8 +29,8 @@ class Lecturer extends BaseController
     public function show($id)
     {
 
-        $lecturer = new LecturerModel;
-        $result = $lecturer->getwhere(['id ' => $id])->getResult();
+        $user = new UserModel;
+        $result = $user->getwhere(['id ' => $id])->getResult();
         if ($result) {
             return $this->respond($result);
         } else {
@@ -44,20 +44,20 @@ class Lecturer extends BaseController
     public function create()
     {
         $data = $this->request->getPost();
-        $lecturer = new LecturerModel;
-        $result = $lecturer->insert($data);
+        $user = new UserModel;
+        $result = $user->insert($data);
         if ($result) {
             $response = [
                 'status' => 201,
                 'error' => null,
                 'messages' => [
-                    'success' => 'Lecturer has been saved'
+                    'success' => 'User has been saved'
                 ]
             ];
             return $this->respondCreated($response);
         } else {
-            if ($lecturer->errors()) {
-                return $this->fail($lecturer->errors());
+            if ($user->errors()) {
+                return $this->fail($user->errors());
             } else {
                 return $this->failServerError();
             }
@@ -71,14 +71,14 @@ class Lecturer extends BaseController
     {
 
         $data = $this->request->getRawInput($id);
-        $lecturer = new LecturerModel;
-        $result = $lecturer->update($id, $data);
+        $user = new UserModel;
+        $result = $user->update($id, $data);
         if ($result) {
-            $lecturers = $lecturer->getwhere(['id' => $id])->getResult();
-            return $this->respondUpdated($lecturers);
+            $users = $user->getwhere(['id' => $id])->getResult();
+            return $this->respondUpdated($users);
         } else {
-            if ($lecturer->errors()) {
-                return $this->fail($lecturer->errors());
+            if ($user->errors()) {
+                return $this->fail($user->errors());
             }
             if ($result == false) {
                 return $this->failServerError();
@@ -91,10 +91,10 @@ class Lecturer extends BaseController
     //@access Private
     public function delete($id)
     {
-        $lecturer = new LecturerModel;
-        $data = $lecturer->find($id);
+        $user = new UserModel;
+        $data = $user->find($id);
         if($data){
-            $deleted = $lecturer->delete($id);
+            $deleted = $user->delete($id);
             return $this->respondDeleted($deleted);
         }
         else{
@@ -102,7 +102,7 @@ class Lecturer extends BaseController
                 'status' => 201,
                 'error' => null,
                 'messages' => [
-                    'success' => 'Lecturer does not exist'
+                    'success' => 'User does not exist'
                 ]
             ];
             return $this->respondCreated($response);
