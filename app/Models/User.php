@@ -19,14 +19,14 @@ class User extends Model
       'lastname',
       'username',
       'email',
-      'role',
+      // 'role',
       'password'
    ];
 
    protected $useTimestamps = true;
    protected $createdField = 'created_at';
    protected $updatedField = 'updated_at';
-   protected $deletedField = 'deleted_at';
+   // protected $deletedField = 'deleted_at';
    protected $beforeInsert = ['beforeInsert'];
    protected $beforeUpdate = ['beforeUpdate'];
 

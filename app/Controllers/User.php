@@ -10,13 +10,18 @@ class User extends BaseController
 {
     use ResponseTrait;
 
-    //@route Get /Lecturer
+    //@route Get /User
     //@desc Get all documents
     //@accesss Private  
     public function index()
     {
         $user = new UserModel;
-        $result = $user->findAll();
+        if ($user->role('student')) {
+            return $this->respond('Not a lecturer');
+        } else {
+            $result = $user->findAll();
+        }
+
         if ($user->errors()) {
             return $this->fail($user->errors());
         } else {
@@ -24,14 +29,16 @@ class User extends BaseController
         }
     }
 
-    // GET request
-    // Get details for a single Lecturer
+    //@route Get /User
+    //@desc Get a user
+    //@accesss Private  
     public function show($id)
     {
 
         $user = new UserModel;
         $result = $user->getwhere(['id ' => $id])->getResult();
         if ($result) {
+
             return $this->respond($result);
         } else {
             return $this->respond('No document with that id exists');
@@ -93,11 +100,10 @@ class User extends BaseController
     {
         $user = new UserModel;
         $data = $user->find($id);
-        if($data){
+        if ($data) {
             $deleted = $user->delete($id);
             return $this->respondDeleted($deleted);
-        }
-        else{
+        } else {
             $response = [
                 'status' => 201,
                 'error' => null,
@@ -108,6 +114,5 @@ class User extends BaseController
             return $this->respondCreated($response);
             // return $this->respond('Lecturer does not exist');
         }
-       
     }
 }
