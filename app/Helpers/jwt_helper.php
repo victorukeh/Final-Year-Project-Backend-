@@ -13,21 +13,21 @@ function getJWTFromRequest($authenticationHeader) : string {
     //JWT is sent from client in the format Bearer XXXXXXXXX
     return explode(' ', $authenticationHeader)[1];
 } 
-//Checks if user with the token has an email present in the database
+//Checks if user with the token has username present in the database
 function validateJWTFromRequest(string $encodedToken){
     $key = Services::getSecretKey();
     $decodedToken = JWT::decode($encodedToken, $key, ['HS256']);
     $user = new UserModel();
-    $user ->findUserByEmailAddress($decodedToken->email);
+    $user ->findUserByUsername($decodedToken->username);
 }
 
 //Creates a JWT token for the user
-function getSignedJWTForUser(string $email){
+function getSignedJWTForUser(string $username){
     $issuedAtTime = time();
     $tokenTimeToLive = getenv('JWT_TIME_TO_LIVE');
     $tokenxpiration = $issuedAtTime + $tokenTimeToLive;
     $payload = [
-        'email' => $email,
+        'username' => $username,
         'iat' => $issuedAtTime,
         'exp' => $tokenxpiration,
 

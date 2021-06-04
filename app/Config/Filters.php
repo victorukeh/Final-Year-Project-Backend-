@@ -64,7 +64,9 @@ class Filters extends BaseConfig
 		'auth' => [
 			'before' => [
 				'User/*',
-				'User'
+				'User',
+				// 'auth/register/*',
+				// 'auth/register/*'
 			]
 		]
 	];

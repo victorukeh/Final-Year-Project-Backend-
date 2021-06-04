@@ -20,10 +20,15 @@ class Validation
 	 * @var string[]
 	 */
 	public $ruleSets = [
-		Rules::class,
-		FormatRules::class,
-		FileRules::class,
-		CreditCardRules::class,
+		// Rules::class,
+		// FormatRules::class,
+		// FileRules::class,
+		// CreditCardRules::class,
+		\CodeIgniter\Validation\Rules::class,
+		\CodeIgniter\Validation\FormatRules::class,
+		\CodeIgniter\Validation\FileRules::class,
+		\CodeIgniter\Validation\CreditCardRules::class,
+		\App\Validation\UserRules::class,
 	];
 
 	/**
@@ -40,4 +45,5 @@ class Validation
 	//--------------------------------------------------------------------
 	// Rules
 	//--------------------------------------------------------------------
+	
 }

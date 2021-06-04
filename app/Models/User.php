@@ -19,7 +19,7 @@ class User extends Model
       'lastname',
       'username',
       'email',
-      // 'role',
+      'role',
       'password'
    ];
 
@@ -33,9 +33,9 @@ class User extends Model
    protected $validationRules = [
       'firstname' => 'required|min_length[2]',
       'lastname' => 'required|min_length[2]',
-      'username' => 'required|min_length[2]',
+      'username' => 'required|min_length[2]|is_unique[users.username]',
       'email' => 'required|valid_email|is_unique[users.email]',
-      //role
+      'role' => 'required|min_length[2]',
       'password' => 'required|min_length[6]'
    ];
    protected $validationMessages = [
@@ -49,7 +49,8 @@ class User extends Model
       ],
       'username' => [
          'required' => 'Your username is required',
-         'min_length' => 'Must be a minimum of 2 characters'
+         'min_length' => 'Must be a minimum of 2 characters',
+         'is_unique' => 'The email already exists in the database'
       ],
       'email' => [
          'required' => 'Your Email is required',
@@ -80,21 +81,47 @@ class User extends Model
          $data['data']['password'] = $this->hashPassword($plaintextPassword);
       }
       return $data;
-      // if($data){
-      //    $this->find('data', 'password')
-      // }
    }
    private function hashPassword(string $plaintextPassword)
    {
       return password_hash($plaintextPassword, PASSWORD_BCRYPT);
    }
 
-   public function findUserByEmailAddress($email)
+   public function findUserByUsername(string $UserName)
    {
-      $user = $this->asArray()->where(['email' => $email])->first();
+      $user = $this->asArray()->where(['username' => $UserName])->first();
       if (!$user) {
-         throw new Exception('User does not exist for specified email Address');
+         throw new Exception('User does not exist for specified username');
          return $user;
       }
+   }
+
+   public function findUserByRole(string $role)
+   {
+      $user = $this->where(['role' => $role]);
+      if (!$user) throw new Exception('Could not find client for specified ID');
+      return $user;
+   }
+
+   public function restrictIfNotAdmin(string $role){
+      if($role != 'admin')throw new Exception('User does not have access ');
+      return $role;
+   }
+
+   public function restrictIfNotStudentOrAdmin(string $role){
+      if($role != 'student' || $role != 'admin')throw new Exception('User does not have access ');
+      return $role;
+   }
+
+   public function restrictLecturerOrAdmin(string $role){
+      if($role != 'lecturer' || $role != 'admin')throw new Exception('User does not have access ');
+      return $role;
+   }
+
+   public function findUserByID($id)
+   {
+      $user = $this->asArray()->where(['id' => $id])->first();
+      if (!$user) throw new Exception('Could not find client for specified ID');
+      return $user;
    }
 }

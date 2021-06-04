@@ -11,29 +11,37 @@ use Exception;
 
 //This file authenticates whether a user is authorized 
 // and then gives the user access for a time limit if authorized
-class JWTAuthenticationFilter implements FilterInterface{
+class JWTAuthenticationFilter implements FilterInterface
+{
+
     use ResponseTrait;
 
-    public function before(RequestInterface $request, $arguments = null){
+    public function before(RequestInterface $request, $arguments = null)
+    {
         $authenticationHeader = $request->getServer('HTTP_AUTHORIZATION');
 
-        try{
+        try {
+
             helper('jwt');
             $encodedToken = getJWTFromRequest($authenticationHeader);
             validateJWTFromRequest($encodedToken);
-            return $request;       
-        } catch (Exception $e){
-                return Services::response()->setJSON(
+            return $request;
+        } catch (Exception $e) {
+
+            return Services::response()
+                ->setJSON(
                     [
                         'error' => $e->getMessage()
                     ]
-                )->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED);
-            }
-    } 
+                )
+                ->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED);
+        }
+    }
 
-    public function after(RequestInterface $request,
-                          ResponseInterface $response,
-                          $arguments = null)
-    {
+    public function after(
+        RequestInterface $request,
+        ResponseInterface $response,
+        $arguments = null
+    ) {
     }
 }
